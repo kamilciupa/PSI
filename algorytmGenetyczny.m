@@ -1,0 +1,50 @@
+%f(x) = 2(x^2 + 1)   gdzie  x e <1..127>
+% dla jakiego x wartoœæ f(x) jest najwiêksza
+
+% ilosc osobnikow
+clear
+n = 5;
+
+%tworzenie populacji
+for j = 1 : n
+    str = dec2bin(randi(127));
+    bytelen = length(str);
+    if( bytelen < 7 )
+        bytelen = 7 - bytelen ;
+        for i = 1:bytelen
+            str = strcat('0', str);
+        end
+    end
+    P1(j,:) = str;
+    str = '0';
+end
+
+%ko³o ruletki 
+sum = 0;
+
+for j = 1:n
+    f = (2*(bin2dec(P1(j,:))*bin2dec(P1(j,:)) + 1));
+    sum = sum + f;
+end
+for j = 1:n
+    f = ((2*(bin2dec(P1(j,:))*bin2dec(P1(j,:)) + 1)) / sum );
+     Vs(j,:) =  f*100;
+end
+
+   Vr(1,:) = Vs(1,:);
+for j = 2:n
+   Vr(j,:) = Vr(j-1,:) + Vs(j,:);
+end
+
+for i = 1:n
+spin = randi(100);
+which = 0 ;
+for j = 1:n
+   if(spin <= Vr(j,:))
+      which = j;
+      break;
+   end
+end
+P2(i,:) = P1(which,:);
+end
+
